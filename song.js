@@ -7,7 +7,7 @@ const lyricsScroll = document.getElementById('lyricsScroll');
 const songLibrary = {
     until: {
         title: "Your Universe ✨",
-        src: "Asset/Your Universe.mp3",
+        src: "Your Universe.mp3",
         lyrics: [
             { time: 0, text: "🎶 (Soft piano intro begins) 🎶" },
             // Verse 1
@@ -70,7 +70,7 @@ const songLibrary = {
     },
     music: {
         title: "Until I Found You ✨",
-        src: "Asset/until.mp3",
+        src: "until.mp3",
         lyrics: [
             { time: 0, text: "🎶 (Music begins) 🎶" },
             { time: 10.6, text: "Georgia, wrap me up in all your..." },
