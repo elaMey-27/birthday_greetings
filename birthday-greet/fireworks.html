@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Night Sky Fireworks 🎆</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="fireworks.css">
+</head>
+
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="Asset/until.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Control Button -->
+    <div class="music-control" id="musicControl" style="z-index: 100;">
+        <button class="music-btn glass-btn" id="musicBtn" title="Toggle Music">
+            <span class="music-icon">🎵</span>
+            <span class="music-label">Music On</span>
+        </button>
+    </div>
+
+    <div class="stars-bg"></div>
+
+    <!-- Navigation -->
+    <div class="top-nav">
+        <a href="index.html" class="glass-btn back-btn">⬅ Back</a>
+
+        <div class="theme-toggle-container">
+            <button id="themeToggle" class="glass-btn theme-btn">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-text">Dark Mode</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Instructions Overlay -->
+    <div class="instruction-overlay" id="instructionOverlay">
+        <h2>Tap to launch fireworks!</h2>
+    </div>
+
+    <!-- Finale Button -->
+    <button class="glass-btn finale-btn" id="finaleBtn">Click me ✨</button>
+
+    <!-- Fireworks Canvas -->
+    <canvas id="fireworksCanvas"></canvas>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('.theme-icon');
+        const text = themeToggle.querySelector('.theme-text');
+
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+            icon.textContent = '☀️';
+            text.textContent = 'Light Mode';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isLightMode = document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+            icon.textContent = isLightMode ? '☀️' : '🌙';
+            text.textContent = isLightMode ? 'Light Mode' : 'Dark Mode';
+        });
+    </script>
+    <script src="fireworks.js"></script>
+</body>
+
+</html>

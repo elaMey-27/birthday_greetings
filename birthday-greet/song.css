@@ -1,0 +1,434 @@
+/* Song page specific styling */
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Changed from hidden to auto */
+}
+
+.stars-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #050510 radial-gradient(circle at center, #1a1a3a 0%, #050510 100%);
+    z-index: -1;
+}
+
+.stars-bg::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: 10vw 20vh #fff, 30vw 40vh #FFB6C1, 50vw 80vh #FFD700, 80vw 10vh #fff, 90vw 50vh #FF69B4, 20vw 80vh #fff, 70vw 90vh #FFD700, 40vw 10vh #FFB6C1;
+    animation: twinkle 4s infinite alternate;
+}
+
+@keyframes twinkle {
+    0% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.top-nav {
+    position: fixed;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+.top-nav > * {
+    pointer-events: auto;
+}
+
+.top-nav .theme-toggle-container {
+    position: static;
+}
+
+.back-btn {
+    text-decoration: none;
+}
+
+/* Main container - FIXED CROPPING ISSUE */
+.song-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: 100px 20px 40px;
+    gap: 30px;
+    box-sizing: border-box;
+}
+
+@media (min-width: 900px) {
+    .song-container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        padding: 80px 40px 40px;
+    }
+}
+
+.glass-card {
+    background: rgba(25, 25, 45, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.player-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    z-index: 2;
+    width: 100%;
+    max-width: 350px;
+}
+
+.song-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 5vw, 2rem);
+    color: #fff;
+    text-shadow: 0 0 10px #FFB6C1;
+    text-align: center;
+    word-break: keep-all;
+}
+
+/* Vinyl Record styling */
+.record-disk {
+    width: clamp(160px, 35vw, 220px);
+    height: clamp(160px, 35vw, 220px);
+    background: #111;
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 20px #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: transform 0.2s linear;
+}
+
+/* Record grooves */
+.record-disk::before {
+    content: '';
+    position: absolute;
+    width: 88%;
+    height: 88%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.record-disk::after {
+    content: '';
+    position: absolute;
+    width: 72%;
+    height: 72%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.record-label {
+    width: clamp(55px, 13vw, 80px);
+    height: clamp(55px, 13vw, 80px);
+    background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 4px solid #222;
+    z-index: 2;
+}
+
+.record-label h2 {
+    font-size: clamp(0.7rem, 2vw, 1rem);
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    margin: 0;
+}
+
+/* Animation class added via JS */
+.record-disk.playing {
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.control-btn {
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    padding: 12px 30px;
+    border-radius: 50px;
+    min-width: 180px;
+}
+
+/* Controls section */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.song-select {
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+}
+
+.song-select option {
+    color: #333;
+}
+
+/* Lyrics */
+.lyrics-wrapper {
+    width: 100%;
+    max-width: 500px;
+    height: 40vh;
+    min-height: 250px;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 20px;
+    /* Fade out top and bottom for smooth scrolling effect */
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+}
+
+/* Show scrollbar for better UX on mobile */
+.lyrics-wrapper::-webkit-scrollbar {
+    width: 3px;
+}
+
+.lyrics-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.lyrics-wrapper::-webkit-scrollbar-thumb {
+    background: #ff69b4;
+    border-radius: 3px;
+}
+
+@media (min-width: 900px) {
+    .lyrics-wrapper {
+        height: 55vh;
+        max-width: 550px;
+    }
+}
+
+.lyrics-scroll {
+    width: 100%;
+    text-align: center;
+    padding: 20% 0;
+}
+
+.lyric-line {
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    font-family: 'Playfair Display', serif;
+    color: rgba(255, 255, 255, 0.3);
+    margin: 20px 0;
+    transition: all 0.5s ease;
+    text-shadow: 0 0 10px rgba(255, 182, 193, 0);
+}
+
+.lyric-line.active {
+    color: #fff;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    text-shadow: 0 0 20px rgba(255, 182, 193, 0.8);
+    transform: scale(1.02);
+}
+
+/* Theme toggle container handled by .top-nav */
+
+/* Mobile specific fixes for cropping */
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .song-container {
+        padding: 80px 15px 40px;
+        min-height: 100vh;
+        justify-content: center;
+    }
+
+    .player-wrapper {
+        padding: 25px;
+        max-width: 100%;
+        margin-top: 0;
+    }
+
+    .lyrics-wrapper {
+        height: 35vh;
+        min-height: 200px;
+        margin-bottom: 20px;
+    }
+
+    .top-nav {
+        top: 15px;
+        padding: 0 15px;
+    }
+
+    .back-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    .theme-btn {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .song-container {
+        padding: 70px 12px 30px;
+    }
+
+    .player-wrapper {
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .song-title {
+        font-size: 1.1rem;
+    }
+
+    .record-disk {
+        width: 120px;
+        height: 120px;
+    }
+
+    .record-label {
+        width: 45px;
+        height: 45px;
+    }
+
+    .record-label h2 {
+        font-size: 0.6rem;
+    }
+
+    .control-btn {
+        padding: 8px 20px;
+        font-size: 0.8rem;
+        min-width: 140px;
+    }
+
+    .lyrics-wrapper {
+        height: 30vh;
+        min-height: 180px;
+        padding: 15px;
+    }
+
+    .lyric-line {
+        font-size: 0.85rem;
+        margin: 12px 0;
+    }
+
+    .lyric-line.active {
+        font-size: 1rem;
+    }
+
+    .song-select {
+        font-size: 0.75rem;
+        padding: 8px;
+    }
+}
+
+/* Landscape mode */
+@media (max-width: 950px) and (orientation: landscape) {
+    .song-container {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: 60px 15px 20px;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .player-wrapper {
+        width: 45%;
+        max-width: 320px;
+        padding: 15px;
+        margin: 0;
+    }
+
+    .lyrics-wrapper {
+        width: 50%;
+        height: 65vh;
+        max-width: 450px;
+        margin: 0;
+    }
+
+    .record-disk {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .record-label {
+        width: 45px;
+        height: 45px;
+    }
+
+    .record-label h2 {
+        font-size: 0.6rem;
+    }
+
+    .song-title {
+        font-size: 1.2rem;
+    }
+
+    .lyric-line {
+        margin: 8px 0;
+        font-size: 0.9rem;
+    }
+    
+    .lyric-line.active {
+        font-size: 1.1rem;
+    }
+}
+
+/* Touch-friendly buttons */
+@media (max-width: 768px) {
+
+    button,
+    .glass-btn,
+    .song-select,
+    .control-btn {
+        min-height: 44px;
+    }
+
+    .lyrics-wrapper {
+        -webkit-overflow-scrolling: touch;
+    }
+}

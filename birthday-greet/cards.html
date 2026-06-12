@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Birthday Letters for Zyne ✨</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cards.css">
+</head>
+
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="Asset/until.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Control Button -->
+    <div class="music-control" id="musicControl">
+        <button class="music-btn glass-btn" id="musicBtn" title="Toggle Music">
+            <span class="music-icon">🎵</span>
+            <span class="music-label">Music On</span>
+        </button>
+    </div>
+
+    <div class="stars-bg"></div>
+
+    <!-- Navigation -->
+    <div class="top-nav">
+        <a href="index.html" class="glass-btn back-btn">⬅ Back</a>
+
+        <div class="theme-toggle-container">
+            <button id="themeToggle" class="glass-btn theme-btn">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-text">Dark Mode</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="cards-wrapper">
+        <h1 class="page-title">Special Letters for Zyne 💌</h1>
+        <p class="page-subtitle">Click an envelope to open your message...</p>
+
+        <div class="envelopes-grid" id="envelopes-grid">
+            <!-- Envelopes will be generated here -->
+        </div>
+
+        <div id="night-sky-unlock"
+            style="display: none; text-align: center; margin-top: 50px; margin-bottom: 50px; animation: fadeIn 1s ease forwards;">
+            <p
+                style="color: #ffb6c1; font-family: 'Poppins', sans-serif; margin-bottom: 15px; font-size: 1.1rem; text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);">
+                You've opened all the envelopes! 💖</p>
+            <a href="fireworks.html" class="glass-btn"
+                style="display: inline-block; padding: 15px 40px; font-size: 1.2rem; background: linear-gradient(135deg, rgba(255, 105, 180, 0.4), rgba(138, 43, 226, 0.4)); box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);">Unlock
+                Night Sky ✨</a>
+        </div>
+    </div>
+
+    <!-- Theme toggle is now in top-nav -->
+
+    <!-- Letter Modal (reusing styles from style.css) -->
+    <div class="letter-modal" id="letterModal">
+        <div class="letter-overlay"></div>
+        <div class="letter-container">
+            <div class="letter">
+                <div class="letter-header">
+                    <h2>A Special Note</h2>
+                    <button class="close-btn" id="closeBtn">&times;</button>
+                </div>
+                <div class="letter-content" id="letter-content-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="cards.js"></script>
+
+    <!-- Background Music Script -->
+    <script>
+        (function () {
+            const bgMusic = document.getElementById('bgMusic');
+            const musicBtn = document.getElementById('musicBtn');
+            const musicIcon = musicBtn.querySelector('.music-icon');
+            const musicLabel = musicBtn.querySelector('.music-label');
+
+            bgMusic.volume = 0;
+            let isMuted = false;
+            let hasStarted = false;
+
+            // Restore previous session state
+            const savedTime = sessionStorage.getItem('musicTime');
+            if (savedTime) {
+                bgMusic.currentTime = parseFloat(savedTime);
+            }
+            const savedMuted = sessionStorage.getItem('musicMuted');
+            if (savedMuted === 'true') {
+                isMuted = true;
+                musicIcon.textContent = '🔇';
+                musicLabel.textContent = 'Muted';
+                musicBtn.classList.add('muted');
+            }
+
+            // Save state continuously
+            setInterval(() => {
+                if (!bgMusic.paused) {
+                    sessionStorage.setItem('musicTime', bgMusic.currentTime);
+                }
+                sessionStorage.setItem('musicMuted', isMuted);
+            }, 250);
+
+            // Fade-in helper
+            function fadeIn(audio, targetVolume, duration) {
+                if (isMuted) return; // don't fade in if muted
+                const steps = 40;
+                const interval = duration / steps;
+                const step = targetVolume / steps;
+                let current = 0;
+                const timer = setInterval(() => {
+                    if (isMuted) { clearInterval(timer); return; }
+                    current += step;
+                    audio.volume = Math.min(current, targetVolume);
+                    if (current >= targetVolume) clearInterval(timer);
+                }, interval);
+            }
+
+            function startMusic() {
+                if (hasStarted) return;
+                hasStarted = true;
+                bgMusic.play().then(() => {
+                    if (!isMuted && !savedTime) {
+                        fadeIn(bgMusic, 0.25, 2000); // fade in from 0 if new
+                    } else if (!isMuted) {
+                        bgMusic.volume = 0.25; // snap to volume if continuing
+                    }
+                }).catch(() => {
+                    // Autoplay blocked — wait for interaction
+                    hasStarted = false;
+                });
+            }
+
+            // Try autoplay immediately
+            startMusic();
+
+            // Fallback: start on first user interaction (browser policy)
+            const startOnInteract = () => {
+                startMusic();
+                document.removeEventListener('click', startOnInteract);
+                document.removeEventListener('touchstart', startOnInteract);
+            };
+            document.addEventListener('click', startOnInteract);
+            document.addEventListener('touchstart', startOnInteract);
+
+            // Mute / Unmute toggle
+            musicBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                isMuted = !isMuted;
+
+                if (isMuted) {
+                    bgMusic.volume = 0;
+                    musicIcon.textContent = '🔇';
+                    musicLabel.textContent = 'Muted';
+                    musicBtn.classList.add('muted');
+                } else {
+                    bgMusic.volume = 0.25;
+                    musicIcon.textContent = '🎵';
+                    musicLabel.textContent = 'Music On';
+                    musicBtn.classList.remove('muted');
+                }
+                sessionStorage.setItem('musicMuted', isMuted);
+            });
+        })();
+    </script>
+    <!-- Balloon Container -->
+    <div class="balloon-container" id="balloonContainer"></div>
+    <!-- Balloon Container -->
+    <div class="balloon-container" id="balloonContainer"></div>
+
+    <!-- Balloon Script -->
+    <script>
+        (function () {
+            // Create balloon container if not exists
+            let balloonContainer = document.getElementById('balloonContainer');
+            if (!balloonContainer) {
+                balloonContainer = document.createElement('div');
+                balloonContainer.id = 'balloonContainer';
+                balloonContainer.className = 'balloon-container';
+                document.body.appendChild(balloonContainer);
+            }
+
+            const balloonColors = ['pink', 'red', 'blue', 'yellow', 'purple', 'green', 'orange'];
+
+            // Secret messages
+            const popMessages = [
+                "💕 Hi, Zyne",
+                "✨ I want to learn you...",
+                "🌸 I want to know the real zyne.",
+                "💫 And",
+                "💖 I want to try loving you.",
+                "🌟 I'm sure of what I feel.",
+                "🎈 Happy Birthday!",
+            ];
+
+            function showFloatingMessage(text, x, y) {
+                const msg = document.createElement('div');
+                msg.textContent = text;
+                msg.style.position = 'fixed';
+                msg.style.left = x + 'px';
+                msg.style.top = y + 'px';
+                msg.style.color = '#ff69b4';
+                msg.style.fontSize = '14px';
+                msg.style.fontWeight = 'bold';
+                msg.style.fontFamily = 'Poppins, sans-serif';
+                msg.style.backgroundColor = 'rgba(255,255,255,0.9)';
+                msg.style.padding = '5px 12px';
+                msg.style.borderRadius = '20px';
+                msg.style.whiteSpace = 'nowrap';
+                msg.style.pointerEvents = 'none';
+                msg.style.zIndex = '1002';
+                msg.style.animation = 'floatMsg 1s ease-out forwards';
+                document.body.appendChild(msg);
+                setTimeout(() => msg.remove(), 1000);
+            }
+
+            function popBalloon(balloon) {
+                const rect = balloon.getBoundingClientRect();
+                const sweetMessage = popMessages[Math.floor(Math.random() * popMessages.length)];
+                showFloatingMessage(sweetMessage, rect.left + rect.width / 2, rect.top);
+
+                balloon.classList.add('pop');
+                setTimeout(() => {
+                    if (balloon && balloon.parentNode) {
+                        balloon.remove();
+                    }
+                }, 200);
+            }
+
+            function createBalloon() {
+                const balloon = document.createElement('div');
+                const randomColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+                balloon.className = `balloon balloon-${randomColor}`;
+                balloon.style.position = 'absolute';
+                balloon.style.bottom = '-100px';
+                balloon.style.left = Math.random() * 90 + 5 + '%';
+
+                const randomScale = 0.6 + Math.random() * 0.8;
+                balloon.style.width = (60 * randomScale) + 'px';
+                balloon.style.height = (80 * randomScale) + 'px';
+
+                const randomDuration = 4 + Math.random() * 8;
+                balloon.style.animation = `floatUp ${randomDuration}s linear forwards`;
+
+                // Add heart
+                const heart = document.createElement('span');
+                heart.innerHTML = '💕';
+                heart.style.position = 'absolute';
+                heart.style.top = '50%';
+                heart.style.left = '50%';
+                heart.style.transform = 'translate(-50%, -50%)';
+                heart.style.fontSize = (24 * randomScale) + 'px';
+                heart.style.opacity = '0.8';
+                balloon.appendChild(heart);
+
+                balloon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    popBalloon(balloon);
+                });
+
+                balloonContainer.appendChild(balloon);
+
+                setTimeout(() => {
+                    if (balloon && balloon.parentNode) {
+                        balloon.remove();
+                    }
+                }, randomDuration * 1000);
+            }
+
+            // Add CSS for balloons
+            const balloonStyle = document.createElement('style');
+            balloonStyle.textContent = `
+            .balloon-container {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 999;
+                overflow: hidden;
+            }
+            .balloon {
+                position: absolute;
+                cursor: pointer;
+                pointer-events: auto;
+                border-radius: 50%;
+                transition: transform 0.1s ease;
+            }
+            .balloon:hover {
+                transform: scale(1.05);
+            }
+            .balloon::before {
+                content: '▼';
+                position: absolute;
+                bottom: -15px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 12px;
+                color: #8B4513;
+            }
+            .balloon::after {
+                content: '';
+                position: absolute;
+                bottom: -25px;
+                left: 50%;
+                width: 2px;
+                height: 25px;
+                background: #8B4513;
+                transform: translateX(-50%);
+            }
+            @keyframes floatUp {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-120vh) rotate(15deg);
+                    opacity: 0;
+                }
+            }
+            .balloon-pink { background: radial-gradient(circle at 30% 30%, #FFB6C1, #FF69B4); }
+            .balloon-red { background: radial-gradient(circle at 30% 30%, #FF6B6B, #E74C3C); }
+            .balloon-blue { background: radial-gradient(circle at 30% 30%, #87CEEB, #4169E1); }
+            .balloon-yellow { background: radial-gradient(circle at 30% 30%, #FFE4B5, #FFD700); }
+            .balloon-purple { background: radial-gradient(circle at 30% 30%, #DDA0DD, #8B008B); }
+            .balloon-green { background: radial-gradient(circle at 30% 30%, #98FB98, #32CD32); }
+            .balloon-orange { background: radial-gradient(circle at 30% 30%, #FFDAB9, #FF8C00); }
+            .balloon.pop {
+                animation: popAnim 0.2s ease forwards !important;
+            }
+            @keyframes popAnim {
+                0% { transform: scale(1); opacity: 1; }
+                100% { transform: scale(0); opacity: 0; }
+            }
+            @keyframes floatMsg {
+                0% { transform: translateY(0); opacity: 1; }
+                100% { transform: translateY(-40px); opacity: 0; }
+            }
+        `;
+            document.head.appendChild(balloonStyle);
+
+            // Start balloons
+            let balloonInterval = setInterval(() => {
+                createBalloon();
+            }, 2000);
+
+            // Create initial balloons
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => createBalloon(), i * 500);
+            }
+
+        })();
+    </script>
+    <audio id="bgMusic" loop>
+        <source src="Asset/until.mp3" type="audio/mpeg">
+    </audio>
+</body>
+
+</html>

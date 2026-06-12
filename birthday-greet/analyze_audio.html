@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analyze Audio</title>
+</head>
+<body>
+    <div id="output">Analyzing...</div>
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        fetch('Asset/Your Universe.mp3')
+            .then(res => res.arrayBuffer())
+            .then(buffer => audioCtx.decodeAudioData(buffer))
+            .then(audioBuffer => {
+                const data = audioBuffer.getChannelData(0); // Left channel
+                const sampleRate = audioBuffer.sampleRate;
+                const duration = audioBuffer.duration;
+                
+                // Let's compute RMS every 100ms
+                const chunkSize = Math.floor(sampleRate * 0.1); // 100ms
+                const rmsValues = [];
+                for (let i = 0; i < data.length; i += chunkSize) {
+                    let sum = 0;
+                    const end = Math.min(i + chunkSize, data.length);
+                    for (let j = i; j < end; j++) {
+                        sum += data[j] * data[j];
+                    }
+                    const rms = Math.sqrt(sum / (end - i));
+                    rmsValues.push({ time: (i / sampleRate).toFixed(2), rms: rms });
+                }
+                
+                // Print the first 15 seconds
+                let html = `<h3>Audio Duration: ${duration.toFixed(2)}s</h3>`;
+                html += '<h3>First 15 seconds energy:</h3>';
+                for (let i = 0; i < 150 && i < rmsValues.length; i++) {
+                    html += `Time: ${rmsValues[i].time}s, RMS: ${rmsValues[i].rms.toFixed(5)}<br>`;
+                }
+                document.getElementById('output').innerHTML = html;
+            })
+            .catch(err => {
+                document.getElementById('output').innerText = 'Error: ' + err.message;
+            });
+    </script>
+</body>
+</html>

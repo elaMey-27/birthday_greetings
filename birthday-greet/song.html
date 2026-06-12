@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Zyne's Melody 🎵</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="song.css">
+</head>
+
+<body>
+    <div class="stars-bg"></div>
+
+    <div class="top-nav">
+        <a href="index.html" class="glass-btn back-btn">⬅ Back</a>
+
+        <div class="theme-toggle-container">
+            <button id="themeToggle" class="glass-btn theme-btn">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-text">Dark Mode</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="song-container">
+        <!-- Vinyl Record / Player UI -->
+        <div class="player-wrapper glass-card">
+            <h1 class="song-title">A Melody For You ✨</h1>
+            <div class="record-disk" id="record">
+                <div class="record-label">
+                    <h2>Zyne</h2>
+                </div>
+            </div>
+
+            <div class="controls"
+                style="display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 250px;">
+                <select id="songSelector" class="glass-btn song-select"
+                    style="text-align: center; font-size: 1rem; padding: 10px; cursor: pointer; border-radius: 15px; background: rgba(255,255,255,0.1); color: #fff;">
+                    <option value="until" style="color: #333;">Your Universe</option>
+                    <option value="music" style="color: #333;">Until I Found You</option>
+                </select>
+                <input type="file" id="customSongInput" accept="audio/*" style="display: none;">
+                <button id="playBtn" class="glass-btn control-btn" style="width: 100%;">▶ Play Song</button>
+            </div>
+
+            <!-- Hidden Audio Element -->
+            <audio id="audioPlayer" src="Asset/Your Universe.mp3"></audio>
+        </div>
+
+        <!-- Lyrics Display -->
+        <div class="lyrics-wrapper glass-card">
+            <div class="lyrics-scroll" id="lyricsScroll">
+                <!-- Lyrics lines generated here via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="song.js"></script>
+</body>
+
+</html>
