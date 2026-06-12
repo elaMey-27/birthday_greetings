@@ -67,7 +67,7 @@ photoWrapper.innerHTML = `
     <div class="envelope photo-envelope" id="env-photo">
         <div class="flap"></div>
         <div class="letter-inside photo-inside">
-            <img src="letter/love_stone.jpg" class="card-photo">
+            <img src="love_stone.jpg" class="card-photo">
             <div class="photo-label">💎 Check ur Necklace Bday Girl 💎</div>
         </div>
         <div class="front"></div>
