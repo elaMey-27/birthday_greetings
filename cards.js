@@ -143,7 +143,7 @@ function openPhotoOnly() {
             </h3>
 
             <div class="photo-container" style="text-align:center;">
-                <img src="letter/love_stone.jpg" style="max-width:85%;border-radius:15px;">
+                <img src="love_stone.jpg" style="max-width:85%;border-radius:15px;">
             </div>
         </div>
     `;
